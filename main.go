@@ -1,91 +1,13 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path"
 
-	"github.com/go-ole/go-ole"
-	"github.com/go-ole/go-ole/oleutil"
+	"github.com/memob0x/retroarch-links-generator/utils"
 )
-
-type RetroArchPlaylistItem struct {
-	RomPath string `json:"path"`
-
-	Label string `json:"label"`
-
-	CorePath string `json:"core_path"`
-}
-
-type RetroArchPlaylist struct {
-	Items []RetroArchPlaylistItem `json:"items"`
-}
-
-// thanks https://stackoverflow.com/questions/32438204/create-a-windows-shortcut-lnk-in-go
-func MakeWinOSLink(src string, dst string) error {
-	ole.CoInitializeEx(0, ole.COINIT_APARTMENTTHREADED|ole.COINIT_SPEED_OVER_MEMORY)
-
-	oleShellObject, err := oleutil.CreateObject("WScript.Shell")
-
-	if err != nil {
-		return err
-	}
-
-	defer oleShellObject.Release()
-
-	wshell, err := oleShellObject.QueryInterface(ole.IID_IDispatch)
-
-	if err != nil {
-		return err
-	}
-
-	defer wshell.Release()
-
-	cs, err := oleutil.CallMethod(wshell, "CreateShortcut", dst)
-
-	if err != nil {
-		return err
-	}
-
-	idispatch := cs.ToIDispatch()
-
-	oleutil.PutProperty(idispatch, "TargetPath", src)
-
-	oleutil.CallMethod(idispatch, "Save")
-
-	return nil
-}
-
-func ParseRetroArchPlaylists(playlistsPath string) []RetroArchPlaylist {
-	files, err := ioutil.ReadDir(playlistsPath)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var playlists []RetroArchPlaylist = []RetroArchPlaylist{}
-
-	for _, file := range files {
-		if !file.IsDir() {
-			plan, err := ioutil.ReadFile(playlistsPath + "/" + file.Name())
-
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			var playlist RetroArchPlaylist
-
-			json.Unmarshal(plan, &playlist)
-
-			playlists = append(playlists, playlist)
-		}
-	}
-
-	return playlists
-}
 
 func ParseCommandLineArgs() (string, string) {
 	var argsCount = len(os.Args)
@@ -112,7 +34,7 @@ func ParseCommandLineArgs() (string, string) {
 func main() {
 	var retroArchExecutablePath, outputLinksPath = ParseCommandLineArgs()
 
-	for _, playlist := range ParseRetroArchPlaylists(path.Dir(retroArchExecutablePath) + "/playlists") {
+	for _, playlist := range utils.ParseRetroarchPlaylistsInFolder(path.Dir(retroArchExecutablePath) + "/playlists") {
 		for _, playlistItem := range playlist.Items {
 			if playlistItem.CorePath != "DETECT" {
 				var linkCmd string = retroArchExecutablePath +
@@ -127,7 +49,7 @@ func main() {
 
 				fmt.Print(linkCmd, "\n")
 
-				MakeWinOSLink(linkCmd, outputLinksPath)
+				utils.MakeWinOSLink(linkCmd, outputLinksPath)
 			}
 		}
 	}

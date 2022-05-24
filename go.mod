@@ -1,4 +1,4 @@
-module retroarch-links-generator
+module github.com/memob0x/retroarch-links-generator
 
 go 1.18
 
