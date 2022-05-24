@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -54,7 +55,13 @@ func main() {
 					" " +
 					playlistItem.RomPath
 
-				err := ioutil.WriteFile(outputLinksPath+"\\"+playlistItem.Label+".bat", []byte(cmd), 0644)
+				fmt.Print(cmd, "\n")
+
+				var filename = outputLinksPath + "\\" + utils.GetValidWinOsFilename(playlistItem.Label) + ".bat"
+
+				fmt.Print(filename, "\n")
+
+				err := ioutil.WriteFile(filename, []byte(cmd), 0644)
 
 				if err != nil {
 					log.Fatal(err)
