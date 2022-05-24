@@ -9,63 +9,29 @@ import (
 	"github.com/memob0x/retroarch-links-generator/utils"
 )
 
-func ParseCommandLineArgs() (string, string) {
-	var argsCount = len(os.Args)
-
-	var retroArchPath string
-
-	var linksDestPath string = "."
-
-	if argsCount >= 2 {
-		retroArchPath = os.Args[1]
-	} else {
-		log.Fatalf("No retroarch path specified, aborting.\n")
-	}
-
-	if argsCount >= 3 {
-		linksDestPath = os.Args[2]
-	} else {
-		log.Fatalf("No destination path specified, aborting.\n")
-	}
-
-	return retroArchPath, linksDestPath
-}
-
 func main() {
-	var retroArchPath, outputLinksPath = ParseCommandLineArgs()
+	var retroArchPath, outputLinksPath = utils.ParseCommandLineArgs(os.Args)
 
-	playlists, err := utils.ParseRetroarchPlaylistsInFolder(retroArchPath + "/playlists")
+	playlists, err := utils.ParseRetroarchPlaylistsInPath(retroArchPath)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var executablePath string = retroArchPath + "\\retroarch.exe"
-
 	for _, playlist := range playlists {
-		for _, playlistItem := range playlist.Items {
-			if playlistItem.CorePath != "DETECT" {
-				var cmd string = executablePath +
-					" " +
-					"--load-menu-on-error" +
-					" " +
-					"-L" +
-					" " +
-					playlistItem.CorePath +
-					" " +
-					playlistItem.RomPath
+		for _, playlistItem := range playlist.Content.Items {
+			linkInfo, err := utils.GetLinkFileInfosFromPlaylistItem(playlistItem, retroArchPath, outputLinksPath)
 
-				fmt.Print(cmd, "\n")
+			if err != nil {
+				fmt.Print("Playlist ", playlist.Path, " parsing for rom ", playlistItem.RomPath, " returned the error: ", err, "\n")
 
-				var filename = outputLinksPath + "\\" + utils.GetValidWinOsFilename(playlistItem.Label) + ".bat"
+				continue
+			}
 
-				fmt.Print(filename, "\n")
+			err = ioutil.WriteFile(linkInfo.Path, []byte(linkInfo.Content), 0644)
 
-				err := ioutil.WriteFile(filename, []byte(cmd), 0644)
-
-				if err != nil {
-					log.Fatal(err)
-				}
+			if err != nil {
+				fmt.Print("The writing of file ", linkInfo.Path, " for playlist ", playlist.Path, " and rom ", playlistItem.RomPath, " returned the error: ", err, "\n")
 			}
 		}
 	}

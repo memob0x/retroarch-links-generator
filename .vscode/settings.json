@@ -1,8 +1,5 @@
 { 
     "editor.codeActionsOnSave": {
       "source.fixAll": true
-    },
-    "gopls": {
-      "build.buildFlags": ["-tags=gui cli"]
     }
   }
