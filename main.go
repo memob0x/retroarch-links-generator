@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
-	"path"
 
 	"github.com/memob0x/retroarch-links-generator/utils"
 )
@@ -25,19 +24,27 @@ func ParseCommandLineArgs() (string, string) {
 	if argsCount >= 3 {
 		linksDestPath = os.Args[2]
 	} else {
-		fmt.Printf("No output folder specified, fallback to \"%v\".\n", linksDestPath)
+		log.Fatalf("No destination path specified, aborting.\n")
 	}
 
 	return retroArchPath, linksDestPath
 }
 
 func main() {
-	var retroArchExecutablePath, outputLinksPath = ParseCommandLineArgs()
+	var retroArchPath, outputLinksPath = ParseCommandLineArgs()
 
-	for _, playlist := range utils.ParseRetroarchPlaylistsInFolder(path.Dir(retroArchExecutablePath) + "/playlists") {
+	playlists, err := utils.ParseRetroarchPlaylistsInFolder(retroArchPath + "/playlists")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var executablePath string = retroArchPath + "\\retroarch.exe"
+
+	for _, playlist := range playlists {
 		for _, playlistItem := range playlist.Items {
 			if playlistItem.CorePath != "DETECT" {
-				var linkCmd string = retroArchExecutablePath +
+				var cmd string = executablePath +
 					" " +
 					"--load-menu-on-error" +
 					" " +
@@ -47,9 +54,11 @@ func main() {
 					" " +
 					playlistItem.RomPath
 
-				fmt.Print(linkCmd, "\n")
+				err := ioutil.WriteFile(outputLinksPath+"\\"+playlistItem.Label+".bat", []byte(cmd), 0644)
 
-				utils.MakeWinOSLink(linkCmd, outputLinksPath)
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
 		}
 	}

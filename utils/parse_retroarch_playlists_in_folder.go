@@ -3,7 +3,6 @@ package utils
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 )
 
 type RetroArchPlaylistItem struct {
@@ -18,11 +17,11 @@ type RetroArchPlaylist struct {
 	Items []RetroArchPlaylistItem `json:"items"`
 }
 
-func ParseRetroarchPlaylistsInFolder(playlistsPath string) []RetroArchPlaylist {
+func ParseRetroarchPlaylistsInFolder(playlistsPath string) ([]RetroArchPlaylist, error) {
 	files, err := ioutil.ReadDir(playlistsPath)
 
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	var playlists []RetroArchPlaylist = []RetroArchPlaylist{}
@@ -32,7 +31,7 @@ func ParseRetroarchPlaylistsInFolder(playlistsPath string) []RetroArchPlaylist {
 			plan, err := ioutil.ReadFile(playlistsPath + "/" + file.Name())
 
 			if err != nil {
-				log.Fatal(err)
+				return nil, err
 			}
 
 			var playlist RetroArchPlaylist
@@ -43,5 +42,5 @@ func ParseRetroarchPlaylistsInFolder(playlistsPath string) []RetroArchPlaylist {
 		}
 	}
 
-	return playlists
+	return playlists, nil
 }
