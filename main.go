@@ -10,9 +10,13 @@ import (
 )
 
 func main() {
-	var retroArchPath, outputLinksPath = utils.ParseCommandLineArgs(os.Args)
+	var retroArchExecutablePath, outputLinksPath, retroArchPlaylistsFolderPath, err = utils.ParseCommandLineArgs(os.Args)
 
-	playlists, err := utils.ParseRetroarchPlaylistsInPath(retroArchPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	playlists, err := utils.ParseRetroarchPlaylistsInPath(retroArchPlaylistsFolderPath)
 
 	if err != nil {
 		log.Fatal(err)
@@ -20,7 +24,7 @@ func main() {
 
 	for _, playlist := range playlists {
 		for _, playlistItem := range playlist.Content.Items {
-			linkInfo, err := utils.GetLinkFileInfosFromPlaylistItem(playlistItem, retroArchPath, outputLinksPath)
+			linkInfo, err := utils.GetLinkFileInfosFromPlaylistItem(playlistItem, retroArchExecutablePath, outputLinksPath)
 
 			if err != nil {
 				fmt.Print("Playlist ", playlist.Path, " parsing for rom ", playlistItem.RomPath, " returned the error: ", err, "\n")

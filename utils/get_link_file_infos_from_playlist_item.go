@@ -1,6 +1,10 @@
 package utils
 
-import "errors"
+import (
+	"errors"
+	"path/filepath"
+	"runtime"
+)
 
 type LinkInfo struct {
 	Content string
@@ -8,14 +12,26 @@ type LinkInfo struct {
 	Path string
 }
 
-func GetLinkFileInfosFromPlaylistItem(playlistItem RetroArchPlaylistItem, src string, dist string) (LinkInfo, error) {
+func GetLinkFileInfosFromPlaylistItem(
+	playlistItem RetroArchPlaylistItem,
+
+	retroArchExecutablePath string,
+
+	outputLinksPath string,
+) (LinkInfo, error) {
+	var linkExtension = ""
+
+	if runtime.GOOS == "windows" {
+		linkExtension = ".bat"
+	}
+
 	if playlistItem.CorePath == "DETECT" {
 		return LinkInfo{}, errors.New("Alert, invalid core " + playlistItem.CorePath + " for " + playlistItem.RomPath)
 	}
 
 	var infos LinkInfo
 
-	var executablePath string = src + "\\retroarch.exe"
+	executablePath, err := filepath.Abs(retroArchExecutablePath)
 
 	infos.Content = executablePath +
 		" " +
@@ -27,7 +43,9 @@ func GetLinkFileInfosFromPlaylistItem(playlistItem RetroArchPlaylistItem, src st
 		" " +
 		playlistItem.RomPath
 
-	infos.Path = dist + "\\" + GetValidWinOsFilename(playlistItem.Label) + ".bat"
+	linkPath, err := filepath.Abs(outputLinksPath + "/" + GetValidWinOsFilename(playlistItem.Label) + linkExtension)
 
-	return infos, nil
+	infos.Path = linkPath
+
+	return infos, err
 }

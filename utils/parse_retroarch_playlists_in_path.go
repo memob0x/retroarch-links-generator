@@ -2,6 +2,7 @@ package utils
 
 import (
 	"io/ioutil"
+	"path/filepath"
 )
 
 type PlaylistInfo struct {
@@ -10,9 +11,7 @@ type PlaylistInfo struct {
 	Content RetroArchPlaylist
 }
 
-func ParseRetroarchPlaylistsInPath(path string) ([]PlaylistInfo, error) {
-	var playlistsPath string = path + "/playlists"
-
+func ParseRetroarchPlaylistsInPath(playlistsPath string) ([]PlaylistInfo, error) {
 	files, err := ioutil.ReadDir(playlistsPath)
 
 	if err != nil {
@@ -23,7 +22,11 @@ func ParseRetroarchPlaylistsInPath(path string) ([]PlaylistInfo, error) {
 
 	for _, file := range files {
 		if !file.IsDir() {
-			var playlistPath string = playlistsPath + "/" + file.Name()
+			playlistPath, err := filepath.Abs(playlistsPath + "/" + file.Name())
+
+			if err != nil {
+				return nil, err
+			}
 
 			plan, err := ioutil.ReadFile(playlistPath)
 

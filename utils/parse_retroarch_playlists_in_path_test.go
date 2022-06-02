@@ -67,24 +67,24 @@ func TestParseRetroarchPlaylistsInPath(t *testing.T) {
 		},
 	}, "./playlists/playlist-3.lpl")
 
-	parsedPlaylists, _ := ParseRetroarchPlaylistsInPath("./")
+	parsedPlaylists, _ := ParseRetroarchPlaylistsInPath("./playlists")
 
 	assert.Equal(
 		t,
 
-		3,
-
 		len(parsedPlaylists),
+
+		3,
 
 		"should be able to parse all playlists in \"playlists\" in folder",
 	)
 
-	assert.Equal(
+	assert.Contains(
 		t,
 
-		".//playlists/playlist-1.lpl", // FIXME: fix double slash
-
 		parsedPlaylists[0].Path,
+
+		"/playlists/playlist-1.lpl",
 
 		"should be able to return the parsed playlist path",
 	)
@@ -92,29 +92,29 @@ func TestParseRetroarchPlaylistsInPath(t *testing.T) {
 	assert.Equal(
 		t,
 
-		2,
-
 		len(parsedPlaylists[0].Content.Items),
+
+		2,
 
 		"should be able to parse all the given playlist entries",
 	)
 
-	assert.Equal(
+	assert.Contains(
 		t,
 
-		"/path/to/core",
-
 		parsedPlaylists[0].Content.Items[0].CorePath,
+
+		"/path/to/core",
 
 		"should be able to parse playlist core path",
 	)
 
-	assert.Equal(
+	assert.Contains(
 		t,
 
-		"/path/to/rom",
-
 		parsedPlaylists[0].Content.Items[0].RomPath,
+
+		"/path/to/rom",
 
 		"should be able to parse playlist rom path",
 	)
@@ -122,9 +122,9 @@ func TestParseRetroarchPlaylistsInPath(t *testing.T) {
 	assert.Equal(
 		t,
 
-		"playlist 1 entry 1 label",
-
 		parsedPlaylists[0].Content.Items[0].Label,
+
+		"playlist 1 entry 1 label",
 
 		"should be able to parse playlist entry label",
 	)

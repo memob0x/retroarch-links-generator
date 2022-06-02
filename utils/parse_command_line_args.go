@@ -1,25 +1,32 @@
 package utils
 
-import "log"
+import (
+	"errors"
+	"path/filepath"
+)
 
-func ParseCommandLineArgs(args []string) (string, string) {
+func ParseCommandLineArgs(args []string) (string, string, string, error) {
 	var argsCount = len(args)
 
-	var retroArchPath string
+	var retroArchExecutablePath string = ""
 
-	var linksDestPath string = "."
+	linksOutputDestPath, err := filepath.Abs(".")
 
 	if argsCount >= 2 {
-		retroArchPath = args[1]
+		retroArchExecutablePath, err = filepath.Abs(args[1])
 	} else {
-		log.Fatalf("No retroarch path specified, aborting.\n")
+		err = errors.New("No retroarch executable path specified.")
 	}
+
+	retroArchPlaylistsPath, err := filepath.Abs(filepath.Dir(retroArchExecutablePath) + "/playlists")
 
 	if argsCount >= 3 {
-		linksDestPath = args[2]
-	} else {
-		log.Fatalf("No destination path specified, aborting.\n")
+		linksOutputDestPath, err = filepath.Abs(args[2])
 	}
 
-	return retroArchPath, linksDestPath
+	if argsCount >= 4 {
+		retroArchPlaylistsPath, err = filepath.Abs(args[3])
+	}
+
+	return retroArchExecutablePath, linksOutputDestPath, retroArchPlaylistsPath, err
 }

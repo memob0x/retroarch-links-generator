@@ -1,21 +1,31 @@
 #!/usr/bin/env bash
+ 
+package_name="retroarch-links-generator"
 
-package=github.com/memob0x/retroarch-links-generator
+# go tool dist list
+platforms=("linux/amd64" "darwin/amd64" "windows/amd64")
 
-package_split=(${package//\// })
-package_name=${package_split[-1]}
+for platform in "${platforms[@]}"
+do
+	platform_split=(${platform//\// })
+	
+	GOOS=${platform_split[0]}
+	
+	GOARCH=${platform_split[1]}
 
-GOOS=windows
+	output_name_cli=$package_name'-'$GOOS'-'$GOARCH
 
-GOARCH=amd64
+	if [ $GOOS = "windows" ];
+	then
+		output_name_cli+='.exe'
+	fi
 
-output_name=$package_name'-'$GOOS'-'$GOARCH 
+	env GOOS=$GOOS GOARCH=$GOARCH go build -o dist/$output_name_cli $package
 
-env GOOS=$GOOS GOARCH=$GOARCH go build -o $output_name.exe $package
+	if [ $? -ne 0 ];
+	then
+		echo 'An error has occurred! Aborting the script execution...'
 
-if [ $? -ne 0 ];
-then
-    echo 'An error has occurred! Aborting the script execution...'
-
-    exit 1
-fi 
+		exit 1
+	fi
+done

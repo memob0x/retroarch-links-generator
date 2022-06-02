@@ -13,25 +13,25 @@ func TestGetLinkFileInfosFromPlaylistItem(t *testing.T) {
 		CorePath: "/path/to/core",
 
 		Label: "Foo Game Bar",
-	}, "/here", "/there")
+	}, "/here/executable.xyz", "/there")
 
-	assert.Equal(
+	assert.Contains(
 		t,
-
-		"/here\\retroarch.exe --load-menu-on-error -L /path/to/core /path/to/rom",
 
 		result.Content,
 
-		"aa",
+		"/here/executable.xyz --load-menu-on-error -L /path/to/core /path/to/rom",
+
+		"Should be able to return an object with valid command content string",
 	)
 
-	assert.Equal(
+	assert.Contains(
 		t,
-
-		"/there\\Foo Game Bar.bat",
 
 		result.Path,
 
-		"aa",
+		"/there/Foo Game Bar",
+
+		"Should be able to return an object with the future link path",
 	)
 }
