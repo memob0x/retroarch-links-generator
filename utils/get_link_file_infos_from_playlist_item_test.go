@@ -20,7 +20,7 @@ func TestGetLinkFileInfosFromPlaylistItem(t *testing.T) {
 
 		result.Content,
 
-		"/here/executable.xyz --load-menu-on-error -L /path/to/core /path/to/rom",
+		"/here/executable.xyz --load-menu-on-error -L \"/path/to/core\" \"/path/to/rom\"",
 
 		"Should be able to return an object with valid command content string",
 	)
