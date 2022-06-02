@@ -39,9 +39,9 @@ func GetLinkFileInfosFromPlaylistItem(
 		" " +
 		"-L" +
 		" " +
-		playlistItem.CorePath +
+		"\"" + playlistItem.CorePath + "\"" +
 		" " +
-		playlistItem.RomPath
+		"\"" + playlistItem.RomPath + "\""
 
 	linkPath, err := filepath.Abs(outputLinksPath + "/" + GetValidWinOsFilename(playlistItem.Label) + linkExtension)
 

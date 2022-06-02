@@ -3,7 +3,7 @@
 package_name="retroarch-links-generator"
 
 # go tool dist list
-platforms=("linux/amd64" "darwin/amd64" "windows/amd64")
+platforms=("linux/amd64" "darwin/amd64" "windows/amd64" "linux/386" "windows/386")
 
 for platform in "${platforms[@]}"
 do
