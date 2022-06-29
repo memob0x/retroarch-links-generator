@@ -14,11 +14,11 @@ func MaybePanic(err error) {
 }
 
 func main() {
-	var retroArchExecutablePath, outputPath, retroArchPlaylistsFolderPath, isOutputPathVdfFile, err = utils.ParseCommandLineArgs(os.Args)
+	var retroArchExecutablePath, outputPath, retroArchPlaylists, isOutputPathVdfFile, err = utils.ParseCommandLineArgs(os.Args)
 
 	MaybePanic(err)
 
-	playlists, err := utils.ParseRetroarchPlaylistsInPath(retroArchPlaylistsFolderPath)
+	playlists, err := utils.ParseRetroarchPlaylistsPaths(retroArchPlaylists)
 
 	MaybePanic(err)
 

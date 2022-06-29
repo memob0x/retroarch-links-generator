@@ -19,7 +19,7 @@ func ParseCommandLineArgs(args []string) (string, string, string, bool, error) {
 		err = errors.New("No retroarch executable path specified.")
 	}
 
-	retroArchPlaylistsPath, err := filepath.Abs(filepath.Dir(retroArchExecutablePath) + "/playlists")
+	retroArchPlaylists, err := filepath.Abs(filepath.Dir(retroArchExecutablePath) + "/playlists")
 
 	if argsCount >= 3 {
 		outputDestPath, err = filepath.Abs(args[2])
@@ -28,8 +28,8 @@ func ParseCommandLineArgs(args []string) (string, string, string, bool, error) {
 	var isOutputPathVdfFile bool = strings.HasSuffix(outputDestPath, ".vdf")
 
 	if argsCount >= 4 {
-		retroArchPlaylistsPath, err = filepath.Abs(args[3])
+		retroArchPlaylists, err = filepath.Abs(args[3])
 	}
 
-	return retroArchExecutablePath, outputDestPath, retroArchPlaylistsPath, isOutputPathVdfFile, err
+	return retroArchExecutablePath, outputDestPath, retroArchPlaylists, isOutputPathVdfFile, err
 }

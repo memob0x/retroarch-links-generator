@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParseRetroarchPlaylistsInPath(t *testing.T) {
+func TestParseRetroarchPlaylistsFiles(t *testing.T) {
 	os.Mkdir("./playlists", 0755)
 
 	WriteRetroarchPlaylist(RetroArchPlaylist{
@@ -67,64 +67,35 @@ func TestParseRetroarchPlaylistsInPath(t *testing.T) {
 		},
 	}, "./playlists/playlist-3.lpl")
 
-	parsedPlaylists, _ := ParseRetroarchPlaylistsInPath("./playlists")
+	aS, _ := os.Stat("./playlists/playlist-1.lpl")
+
+	bS, _ := os.Stat("./playlists/playlist-2.lpl")
+
+	cS, _ := os.Stat("./playlists/playlist-3.lpl")
+
+	parsedPlaylists, _ := ParseRetroarchPlaylistsFiles([]FileInfo{
+		{
+			Path:   "./playlists/playlist-1.lpl",
+			FsFile: aS,
+		},
+
+		{
+			Path:   "./playlists/playlist-2.lpl",
+			FsFile: bS,
+		},
+
+		{
+			Path:   "./playlists/playlist-3.lpl",
+			FsFile: cS,
+		},
+	})
 
 	assert.Equal(
 		t,
 
-		len(parsedPlaylists),
+		"playlist 1 entry 2 label",
 
-		3,
-
-		"should be able to parse all playlists in \"playlists\" in folder",
-	)
-
-	assert.Contains(
-		t,
-
-		parsedPlaylists[0].Path,
-
-		"/playlists/playlist-1.lpl",
-
-		"should be able to return the parsed playlist path",
-	)
-
-	assert.Equal(
-		t,
-
-		len(parsedPlaylists[0].Content.Items),
-
-		2,
-
-		"should be able to parse all the given playlist entries",
-	)
-
-	assert.Contains(
-		t,
-
-		parsedPlaylists[0].Content.Items[0].CorePath,
-
-		"/path/to/core",
-
-		"should be able to parse playlist core path",
-	)
-
-	assert.Contains(
-		t,
-
-		parsedPlaylists[0].Content.Items[0].RomPath,
-
-		"/path/to/rom",
-
-		"should be able to parse playlist rom path",
-	)
-
-	assert.Equal(
-		t,
-
-		parsedPlaylists[0].Content.Items[0].Label,
-
-		"playlist 1 entry 1 label",
+		parsedPlaylists[0].Content.Items[1].Label,
 
 		"should be able to parse playlist entry label",
 	)
