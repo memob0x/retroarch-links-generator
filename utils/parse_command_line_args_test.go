@@ -7,7 +7,7 @@ import (
 )
 
 func TestParseCommandLineArgs(t *testing.T) {
-	a, b, c, _ := ParseCommandLineArgs([]string{"command", "/path/to/executable", "/path/to/links/output", "/path/to/playlists", "extra", "args"})
+	a, b, c, cbool, _ := ParseCommandLineArgs([]string{"command", "/path/to/executable", "/path/to/links/output", "/path/to/playlists", "extra", "args"})
 
 	assert.Contains(
 		t,
@@ -39,7 +39,15 @@ func TestParseCommandLineArgs(t *testing.T) {
 		"should be able to extract fourth value from the argument list",
 	)
 
-	d, e, f, _ := ParseCommandLineArgs([]string{"command", "/path/to/executable", "/path/to/links/output"})
+	assert.False(
+		t,
+
+		cbool,
+
+		"should be able to detect a not given vdf output file",
+	)
+
+	d, e, f, fbool, _ := ParseCommandLineArgs([]string{"command", "/path/to/executable", "/path/to/links/output.vdf"})
 
 	assert.Contains(
 		t,
@@ -54,7 +62,7 @@ func TestParseCommandLineArgs(t *testing.T) {
 	assert.Contains(
 		t,
 
-		"/path/to/links/output",
+		"/path/to/links/output.vdf",
 
 		e,
 
@@ -69,5 +77,13 @@ func TestParseCommandLineArgs(t *testing.T) {
 		f,
 
 		"should be able to extract fourth value from the argument list",
+	)
+
+	assert.True(
+		t,
+
+		fbool,
+
+		"should be able to detect a given vdf output file",
 	)
 }

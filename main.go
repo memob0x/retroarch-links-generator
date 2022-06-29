@@ -1,42 +1,40 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
 	"github.com/memob0x/retroarch-links-generator/utils"
 )
 
-func main() {
-	var retroArchExecutablePath, outputLinksPath, retroArchPlaylistsFolderPath, err = utils.ParseCommandLineArgs(os.Args)
-
+func MaybePanic(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func main() {
+	var retroArchExecutablePath, outputPath, retroArchPlaylistsFolderPath, isOutputPathVdfFile, err = utils.ParseCommandLineArgs(os.Args)
+
+	MaybePanic(err)
 
 	playlists, err := utils.ParseRetroarchPlaylistsInPath(retroArchPlaylistsFolderPath)
 
-	if err != nil {
-		log.Fatal(err)
+	MaybePanic(err)
+
+	if isOutputPathVdfFile {
+		err = utils.WritePlaylistsItemsVdf(playlists, retroArchExecutablePath, outputPath)
+
+		MaybePanic(err)
+
+		return
 	}
 
-	for _, playlist := range playlists {
-		for _, playlistItem := range playlist.Content.Items {
-			linkInfo, err := utils.GetLinkFileInfosFromPlaylistItem(playlistItem, retroArchExecutablePath, outputLinksPath)
+	if !isOutputPathVdfFile {
+		err = utils.WritePlaylistsItemsLinks(playlists, retroArchExecutablePath, outputPath)
 
-			if err != nil {
-				fmt.Print("Playlist ", playlist.Path, " parsing for rom ", playlistItem.RomPath, " returned the error: ", err, "\n")
+		MaybePanic(err)
 
-				continue
-			}
-
-			err = ioutil.WriteFile(linkInfo.Path, []byte(linkInfo.Content), 0644)
-
-			if err != nil {
-				fmt.Print("The writing of file ", linkInfo.Path, " for playlist ", playlist.Path, " and rom ", playlistItem.RomPath, " returned the error: ", err, "\n")
-			}
-		}
+		return
 	}
 }

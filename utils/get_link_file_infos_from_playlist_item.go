@@ -3,10 +3,13 @@ package utils
 import (
 	"errors"
 	"path/filepath"
-	"runtime"
 )
 
 type LinkInfo struct {
+	Directory string
+
+	Arguments string
+
 	Content string
 
 	Path string
@@ -19,12 +22,6 @@ func GetLinkFileInfosFromPlaylistItem(
 
 	outputLinksPath string,
 ) (LinkInfo, error) {
-	var linkExtension = ""
-
-	if runtime.GOOS == "windows" {
-		linkExtension = ".bat"
-	}
-
 	if playlistItem.CorePath == "DETECT" {
 		return LinkInfo{}, errors.New("Alert, invalid core " + playlistItem.CorePath + " for " + playlistItem.RomPath)
 	}
@@ -33,9 +30,7 @@ func GetLinkFileInfosFromPlaylistItem(
 
 	executablePath, err := filepath.Abs(retroArchExecutablePath)
 
-	infos.Content = executablePath +
-		" " +
-		"--load-menu-on-error" +
+	infos.Arguments = "--load-menu-on-error" +
 		" " +
 		"-L" +
 		" " +
@@ -43,7 +38,13 @@ func GetLinkFileInfosFromPlaylistItem(
 		" " +
 		"\"" + playlistItem.RomPath + "\""
 
-	linkPath, err := filepath.Abs(outputLinksPath + "/" + GetValidWinOsFilename(playlistItem.Label) + linkExtension)
+	infos.Content = executablePath +
+		" " +
+		infos.Arguments
+
+	linkPath, err := filepath.Abs(outputLinksPath + "/" + GetValidWinOsFilename(playlistItem.Label))
+
+	infos.Directory = outputLinksPath
 
 	infos.Path = linkPath
 
