@@ -6,13 +6,15 @@ import (
 )
 
 type LinkInfo struct {
+	Name string
+
+	Exe string
+
 	Directory string
 
 	Arguments string
 
 	Content string
-
-	Path string
 }
 
 func GetLinkFileInfosFromPlaylistItem(
@@ -38,15 +40,15 @@ func GetLinkFileInfosFromPlaylistItem(
 		" " +
 		"\"" + playlistItem.RomPath + "\""
 
+	infos.Exe = retroArchExecutablePath
+
 	infos.Content = executablePath +
 		" " +
 		infos.Arguments
 
-	linkPath, err := filepath.Abs(outputLinksPath + "/" + GetValidWinOsFilename(playlistItem.Label))
+	infos.Name = playlistItem.Label
 
 	infos.Directory = outputLinksPath
-
-	infos.Path = linkPath
 
 	return infos, err
 }

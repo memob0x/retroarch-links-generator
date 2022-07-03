@@ -1,0 +1,19 @@
+{
+  "version": "1.5",
+  "default_core_path": "",
+  "default_core_name": "",
+  "label_display_mode": 0,
+  "right_thumbnail_mode": 0,
+  "left_thumbnail_mode": 0,
+  "sort_mode": 0,
+  "items": [
+    {
+      "path": "a-rom.zip",
+      "label": "A Game",
+      "core_path": "a-core",
+      "core_name": "a-core-name",
+      "crc32": "00000000|crc",
+      "db_name": "playlist.lpl"
+    }
+  ]
+}

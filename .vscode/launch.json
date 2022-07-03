@@ -2,13 +2,32 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch CLI",
+            "name": "Launch CLI (shortcuts)",
             "type": "go",
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceRoot}",
             "buildFlags": "",
-            "showLog": true
+            "showLog": true,
+            "args": [
+                "${workspaceRoot}/data/retroarch",
+                "${workspaceRoot}/debug",
+                "${workspaceRoot}/data/playlist.lpl"
+            ]
+        },
+        {
+            "name": "Launch CLI (vdf)",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceRoot}",
+            "buildFlags": "",
+            "showLog": true,
+            "args": [
+                "${workspaceRoot}/data/retroarch",
+                "${workspaceRoot}/data/steam.vdf",
+                "${workspaceRoot}/data/playlist.lpl"
+            ]
         },
         {
             "name": "Test Utilities",

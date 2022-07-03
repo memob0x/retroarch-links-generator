@@ -23,7 +23,7 @@ func main() {
 	MaybePanic(err)
 
 	if isOutputPathVdfFile {
-		err = utils.WritePlaylistsItemsVdf(playlists, retroArchExecutablePath, outputPath)
+		_, err = utils.WritePlaylistsItemsVdf(playlists, retroArchExecutablePath, outputPath)
 
 		MaybePanic(err)
 

@@ -24,14 +24,4 @@ func TestGetLinkFileInfosFromPlaylistItem(t *testing.T) {
 
 		"Should be able to return an object with valid command content string",
 	)
-
-	assert.Contains(
-		t,
-
-		result.Path,
-
-		"/there/Foo Game Bar",
-
-		"Should be able to return an object with the future link path",
-	)
 }
