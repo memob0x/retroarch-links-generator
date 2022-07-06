@@ -3,6 +3,9 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"os"
+
+	"github.com/wakeful-cloud/vdf"
 )
 
 func WritePlaylistsItemsVdf(retroArchPlaylists []PlaylistInfo, retroArchExecutablePath string, vdfFilePath string) ([]SteamShortcut, error) {
@@ -43,9 +46,23 @@ func WritePlaylistsItemsVdf(retroArchPlaylists []PlaylistInfo, retroArchExecutab
 		}
 	}
 
-	// TODO: write vdf file
+	shortcutsMap := ConvertShortcutsToVdfMap(shortcuts)
 
-	fmt.Printf("%v", shortcuts)
+	for k, v := range shortcutsMap {
+		fmt.Printf("%v %v", k, v)
+	}
+
+	vdfFileUpdated, err := vdf.WriteVdf(shortcutsMap)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = os.WriteFile(vdfFilePath, vdfFileUpdated, 0655)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return shortcuts, nil
 }
