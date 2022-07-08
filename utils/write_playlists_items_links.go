@@ -9,13 +9,19 @@ import (
 	"runtime"
 )
 
+var ErrorLinkCreation error = errors.New("Link creation error")
+var ErrorOutputFolder error = errors.New("Error creating output folder.")
+var ErrorExistentFile error = errors.New("Output path is an existent file.")
+
 func WritePlaylistsItemsLinks(playlists []PlaylistInfo, retroArchExecutablePath string, outputLinksPath string) error {
 	for _, playlist := range playlists {
 		for _, playlistItem := range playlist.Content.Items {
 			linkInfo, err := GetLinkFileInfosFromPlaylistItem(playlistItem, retroArchExecutablePath, outputLinksPath)
 
+			var warningMessage = fmt.Sprintf("Playlist %v parsing for rom %v returned the error: %v\n", playlist.Path, playlistItem.RomPath, err)
+
 			if err != nil {
-				fmt.Print("Playlist ", playlist.Path, " parsing for rom ", playlistItem.RomPath, " returned the error: ", err, "\n")
+				fmt.Print(warningMessage)
 
 				continue
 			}
@@ -27,14 +33,22 @@ func WritePlaylistsItemsLinks(playlists []PlaylistInfo, retroArchExecutablePath 
 			var outputPathExists bool = !outputPathDoesntExist
 
 			if outputPathDoesntExist && os.Mkdir(outputLinksPath, 0755) != nil {
-				return errors.New("Error creating output folder.")
+				fmt.Print(warningMessage)
+
+				return ErrorOutputFolder
 			}
 
 			if outputPathExists && !outputPathStat.IsDir() {
-				return errors.New("Output path is an existent file.")
+				fmt.Print(warningMessage)
+
+				return ErrorExistentFile
 			}
 
 			linkPath, err := filepath.Abs(outputLinksPath + "/" + GetValidWinOsFilename(linkInfo.Name))
+
+			if err != nil {
+				return ErrorLinkCreation
+			}
 
 			// TODO: handle shortcut icon
 
@@ -51,7 +65,7 @@ func WritePlaylistsItemsLinks(playlists []PlaylistInfo, retroArchExecutablePath 
 			}
 
 			if err != nil {
-				return errors.New("The writing of file " + linkPath + " for playlist " + playlist.Path + " and rom " + playlistItem.RomPath + " returned the error: " + err.Error() + "\n")
+				return ErrorLinkCreation
 			}
 		}
 	}
