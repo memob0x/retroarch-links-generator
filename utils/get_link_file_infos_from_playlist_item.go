@@ -10,8 +10,6 @@ type LinkInfo struct {
 
 	Exe string
 
-	Directory string
-
 	Arguments string
 
 	Content string
@@ -47,8 +45,6 @@ func GetLinkFileInfosFromPlaylistItem(
 		infos.Arguments
 
 	infos.Name = playlistItem.Label
-
-	infos.Directory = outputLinksPath
 
 	return infos, err
 }

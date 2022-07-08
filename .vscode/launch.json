@@ -10,8 +10,8 @@
             "buildFlags": "",
             "showLog": true,
             "args": [
-                "${workspaceRoot}/data/retroarch",
-                "${workspaceRoot}/debug",
+                "${workspaceRoot}/data/executable",
+                "${workspaceRoot}/debug-output",
                 "${workspaceRoot}/data/playlist.lpl"
             ]
         },
@@ -24,8 +24,8 @@
             "buildFlags": "",
             "showLog": true,
             "args": [
-                "${workspaceRoot}/data/retroarch",
-                "${workspaceRoot}/data/steam.vdf",
+                "${workspaceRoot}/data/executable",
+                "${workspaceRoot}/data/shortcuts.vdf",
                 "${workspaceRoot}/data/playlist.lpl"
             ]
         },

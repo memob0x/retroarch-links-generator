@@ -19,8 +19,18 @@ func WritePlaylistsItemsVdf(retroArchPlaylists []PlaylistInfo, retroArchExecutab
 		for _, playlistItem := range playlist.Content.Items {
 			linkInfo, err := GetLinkFileInfosFromPlaylistItem(playlistItem, retroArchExecutablePath, "")
 
+			var warningMessage string = fmt.Sprintf("Playlist %v parsing for rom %v returned the error: %v\n", playlist.Path, playlistItem.RomPath, err)
+
 			if err != nil {
-				fmt.Print("Playlist ", playlist.Path, " parsing for rom ", playlistItem.RomPath, " returned the error: ", err, "\n")
+				fmt.Print(warningMessage)
+
+				continue
+			}
+
+			startDir, err := GetDirPath(retroArchExecutablePath)
+
+			if err != nil {
+				fmt.Print(warningMessage)
 
 				continue
 			}
@@ -30,12 +40,12 @@ func WritePlaylistsItemsVdf(retroArchPlaylists []PlaylistInfo, retroArchExecutab
 
 				AppName: linkInfo.Name,
 
-				// TODO: handle icon
+				// TODO: maybe handle icon
 				Icon: "",
 
 				Exe: linkInfo.Exe,
 
-				StartDir: linkInfo.Directory,
+				StartDir: startDir,
 
 				LaunchOptions: linkInfo.Arguments,
 			}
@@ -46,7 +56,11 @@ func WritePlaylistsItemsVdf(retroArchPlaylists []PlaylistInfo, retroArchExecutab
 		}
 	}
 
-	shortcutsMap := ConvertShortcutsToVdfMap(shortcuts)
+	shortcutsMap, err := ConvertShortcutsToVdfMap(shortcuts)
+
+	if err != nil {
+		return nil, err
+	}
 
 	for k, v := range shortcutsMap {
 		fmt.Printf("%v %v", k, v)
