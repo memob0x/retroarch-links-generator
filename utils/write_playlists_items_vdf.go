@@ -19,7 +19,15 @@ func WritePlaylistsItemsVdf(retroArchPlaylists []PlaylistInfo, retroArchExecutab
 		for _, playlistItem := range playlist.Content.Items {
 			linkInfo, err := GetLinkFileInfosFromPlaylistItem(playlistItem, retroArchExecutablePath, "")
 
-			var warningMessage string = fmt.Sprintf("Playlist %v parsing for rom %v returned the error: %v\n", playlist.Path, playlistItem.RomPath, err)
+			var warningMessage string = fmt.Sprintf(
+				"Playlist %v parsing for rom %v returned the error: %v\n",
+
+				playlist.Path,
+
+				playlistItem.RomPath,
+
+				err,
+			)
 
 			if err != nil {
 				fmt.Print(warningMessage)

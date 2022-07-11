@@ -16,14 +16,14 @@ Generate links to RetroArch playlists entries and launch them like normal games.
 retroarch-links-generator /the/retroarch/executable /the/destination/folder /the/retroarch/playlists
 ```
 
-It's possible to parse only certain playlists with the following command:
+It's possible to parse only **certain playlists** with the following command:
 
 ```console
 retroarch-links-generator /executable /dest ./playlist-1.lpl,./playlist-2.lpl
 ``` 
 
-## Steam
+It's possible to write directly **[Steam](https://it.wikipedia.org/wiki/Steam_(informatica)) library shortcuts** providing a path to the right vdf file (usually /(steam installation path)/userdata/(your user id)/config/shortcuts.vdf)
 
 ```console
-retroarch-links-generator /the/retroarch/executable /the/steam/libraryfolder.vdf
+retroarch-links-generator /the/retroarch/executable /the/steam/shortcuts.vdf
 ``` 
