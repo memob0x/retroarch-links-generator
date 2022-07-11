@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"runtime"
 )
 
 var ErrorLinkCreation error = errors.New("Link creation error")
@@ -58,9 +57,9 @@ func WritePlaylistsItemsLinks(playlists []PlaylistInfo, retroArchExecutablePath 
 				return ErrorLinkCreation
 			}
 
-			// TODO: handle shortcut icon
+			// TODO: maybe handle icon
 
-			if runtime.GOOS == "windows" {
+			if IS_OS_WINDOWS {
 				err = CreateWinOsExeShortcut(
 					retroArchExecutablePath,
 

@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+var ErrorRetroArchExecutablePath = errors.New("No retroarch executable path specified.")
+
 func ParseCommandLineArgs(args []string) (string, string, string, bool, error) {
 	var argsCount = len(args)
 
@@ -16,7 +18,7 @@ func ParseCommandLineArgs(args []string) (string, string, string, bool, error) {
 	if argsCount >= 2 {
 		retroArchExecutablePath, err = filepath.Abs(args[1])
 	} else {
-		err = errors.New("No retroarch executable path specified.")
+		err = ErrorRetroArchExecutablePath
 	}
 
 	retroArchPlaylists, err := filepath.Abs(filepath.Dir(retroArchExecutablePath) + "/playlists")

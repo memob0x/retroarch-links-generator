@@ -8,6 +8,8 @@ import (
 	"github.com/wakeful-cloud/vdf"
 )
 
+var ErrorInvalidVdfProp error = errors.New("invalid vdf type property")
+
 func ConvertShortcutToVdfMap(shortcut SteamShortcut) (vdf.Map, error) {
 	shortcutJson, _ := json.Marshal(&shortcut)
 
@@ -29,7 +31,7 @@ func ConvertShortcutToVdfMap(shortcut SteamShortcut) (vdf.Map, error) {
 		case uint32, string, vdf.Map:
 			shortcutMapSafe[index] = a
 		default:
-			return nil, errors.New("invalid vdf type property")
+			return nil, ErrorInvalidVdfProp
 		}
 	}
 

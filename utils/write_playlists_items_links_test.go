@@ -2,16 +2,21 @@ package utils
 
 import (
 	"os"
-	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWritePlaylistsItemsLinks(t *testing.T) {
-	if runtime.GOOS == "windows" {
-		// TODO: add windows tests
+func testWritePlaylistItemsLinksWindows(t *testing.T) {
+	if !IS_OS_WINDOWS {
+		return
+	}
 
+	// TODO: add windows tests
+}
+
+func testWritePlaylistItemsLinksNonWindows(t *testing.T) {
+	if IS_OS_WINDOWS {
 		return
 	}
 
@@ -22,15 +27,17 @@ func TestWritePlaylistsItemsLinks(t *testing.T) {
 			{
 				Path: "/path/to/the/playlist",
 
-				Content: RetroArchPlaylist{Items: []RetroArchPlaylistItem{
-					{
-						RomPath: "./rom-test",
+				Content: RetroArchPlaylist{
+					Items: []RetroArchPlaylistItem{
+						{
+							RomPath: "./rom-test",
 
-						Label: "rom test",
+							Label: "rom test",
 
-						CorePath: "/path/to/core",
+							CorePath: "/path/to/core",
+						},
 					},
-				}},
+				},
 			},
 		},
 
@@ -54,4 +61,10 @@ func TestWritePlaylistsItemsLinks(t *testing.T) {
 	os.Remove("./rom test")
 
 	os.Remove("./fake-exe")
+}
+
+func TestWritePlaylistsItemsLinks(t *testing.T) {
+	testWritePlaylistItemsLinksWindows(t)
+
+	testWritePlaylistItemsLinksNonWindows(t)
 }

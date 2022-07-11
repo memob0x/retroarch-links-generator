@@ -2,11 +2,40 @@ package utils
 
 import (
 	"os"
-	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func testCreateWinOsShortcutWindows(t *testing.T) {
+	if !IS_OS_WINDOWS {
+		return
+	}
+
+	// TODO: check if it effectively passes on windows
+
+	s, _ := os.Stat("./foo-link.lnk")
+
+	assert.Greater(
+		t,
+
+		s.Size(),
+
+		int64(0),
+
+		"Should be able to write a Windows os Lnk file",
+	)
+
+	os.Remove("./foo-link.lnk")
+}
+
+func testCreateWinOsShortcutNonWindows(t *testing.T) {
+	if IS_OS_WINDOWS {
+		return
+	}
+
+	// TODO: add non-windows tests
+}
 
 func TestCreateWinOsShortcut(t *testing.T) {
 	err := CreateWinOsExeShortcut(
@@ -63,25 +92,7 @@ func TestCreateWinOsShortcut(t *testing.T) {
 		"Should not return an error if valid *.exe source and *.lnk target are passed",
 	)
 
-	if runtime.GOOS != "windows" {
-		// TODO: add non-windows tests
+	testCreateWinOsShortcutNonWindows(t)
 
-		return
-	}
-
-	// TODO: check if it effectively passes on windows
-
-	s, _ := os.Stat("./foo-link.lnk")
-
-	assert.Greater(
-		t,
-
-		s.Size(),
-
-		int64(0),
-
-		"Should be able to write a Windows os Lnk file",
-	)
-
-	os.Remove("./foo-link.lnk")
+	testCreateWinOsShortcutWindows(t)
 }
