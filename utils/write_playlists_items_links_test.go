@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func testWritePlaylistItemsLinksWindows(t *testing.T) {
+func testWritePlaylistItemsLinksWindows(_ *testing.T) {
 	if !IS_OS_WINDOWS {
 		return
 	}

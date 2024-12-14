@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-var WinOsExeShortcutCreationInputError = errors.New("Invalid executable paths provided")
+var ErrWinOsExeShortcutCreationInput = errors.New("invalid executable paths provided")
 
 func GetVbsScriptShortcutCreatorContent(
 	shortcutSourceFilePath string,
@@ -16,7 +16,7 @@ func GetVbsScriptShortcutCreatorContent(
 	shortcutArguments string,
 ) (string, error) {
 	if !strings.HasSuffix(shortcutSourceFilePath, ".exe") || !strings.HasSuffix(shortcutTargetFilePath, ".lnk") {
-		return "", WinOsExeShortcutCreationInputError
+		return "", ErrWinOsExeShortcutCreationInput
 	}
 
 	var linkCreationCommandString = fmt.Sprintf(`Set oWS = WScript.CreateObject("WScript.Shell")

@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 )
 
-var ErrorLinkCreation error = errors.New("Link creation error")
-var ErrorOutputFolder error = errors.New("Error creating output folder.")
-var ErrorExistentFile error = errors.New("Output path is an existent file.")
+var ErrorLinkCreation error = errors.New("link creation error")
+var ErrorOutputFolder error = errors.New("error creating output folder")
+var ErrorExistentFile error = errors.New("output path is an existent file")
 
 func WritePlaylistsItemsLinks(playlists []PlaylistInfo, retroArchExecutablePath string, outputLinksPath string) error {
 	for _, playlist := range playlists {

@@ -30,7 +30,7 @@ func TestGetVbsScriptShortcutCreatorContent(t *testing.T) {
 
 		err,
 
-		WinOsExeShortcutCreationInputError,
+		ErrWinOsExeShortcutCreationInput,
 
 		"Should return an error if a source without .exe extension is passed",
 	)
@@ -58,7 +58,7 @@ func TestGetVbsScriptShortcutCreatorContent(t *testing.T) {
 
 		err,
 
-		WinOsExeShortcutCreationInputError,
+		ErrWinOsExeShortcutCreationInput,
 
 		"Should return an error if a target without .lnk extension is passed",
 	)
@@ -86,7 +86,7 @@ func TestGetVbsScriptShortcutCreatorContent(t *testing.T) {
 
 		err,
 
-		WinOsExeShortcutCreationInputError,
+		ErrWinOsExeShortcutCreationInput,
 
 		"Should not return an error if valid *.exe source and *.lnk target are passed",
 	)

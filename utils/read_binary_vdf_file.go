@@ -7,7 +7,7 @@ import (
 	"github.com/wakeful-cloud/vdf"
 )
 
-var ErrorVdfNotExists = errors.New("No vdf file.")
+var ErrorVdfNotExists = errors.New("no vdf file")
 
 func ReadBinaryVdfFile(vdfFilePath string) (vdf.Map, error) {
 	var vdfMap vdf.Map

@@ -15,7 +15,7 @@ type LinkInfo struct {
 	Content string
 }
 
-var ErrorInvalidCore = errors.New("Alert, invalid core")
+var ErrorInvalidCore = errors.New("alert, invalid core")
 
 func GetLinkFileInfosFromPlaylistItem(
 	playlistItem RetroArchPlaylistItem,

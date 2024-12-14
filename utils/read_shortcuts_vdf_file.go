@@ -30,7 +30,7 @@ type SteamShortcut struct {
 	Tags                vdf.Map `json:"tags"`
 }
 
-var ErrorInvalidVdfFile = errors.New("Not a shortcuts vdf")
+var ErrorInvalidVdfFile = errors.New("not a shortcuts vdf")
 
 func ReadShortcutsVdfFile(vdfFilePath string) ([]SteamShortcut, error) {
 	vdfMap, err := ReadBinaryVdfFile(vdfFilePath)

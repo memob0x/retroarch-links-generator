@@ -25,9 +25,9 @@ func ConvertShortcutToVdfMap(shortcut SteamShortcut) (vdf.Map, error) {
 			continue
 		}
 
-		switch a.(type) {
+		switch b := a.(type) {
 		case float64:
-			shortcutMapSafe[index] = uint32(math.Round(a.(float64)))
+			shortcutMapSafe[index] = uint32(math.Round(b))
 		case uint32, string, vdf.Map:
 			shortcutMapSafe[index] = a
 		default:
